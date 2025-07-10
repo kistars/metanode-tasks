@@ -26,15 +26,20 @@ contract MyToken is IERC20, Ownable {
     uint256 private _totalSupply; // 代币总供应量
     mapping(address => uint256) private _balances; // 账户余额
     // owner允许spender转账代币amount
-    mapping(address owner => mapping(address spender => uint256 amount)) private _allowance;
+    mapping(address => mapping(address => uint256)) private _allowance;
 
     constructor() Ownable() {
         _mint(msg.sender, 10000);
     }
 
-    function _mint(address account, uint256 amount) internal virtual onlyOwner {
+    function _mint(address account, uint256 amount) internal virtual {
         _totalSupply += amount;
         _balances[account] += amount;
+    }
+
+    // 增发代币
+    function mint(uint256 amount) public onlyOwner {
+        _mint(msg.sender, amount);
     }
 
     function totalSupply() external view returns (uint256) {
@@ -46,6 +51,7 @@ contract MyToken is IERC20, Ownable {
     }
 
     function transfer(address to, uint256 value) external returns (bool) {
+        require(_balances[msg.sender] >= value, "ERC20: transfer amount exceeds balance");
         _balances[msg.sender] -= value;
         _balances[to] += value;
         emit Transfer(msg.sender, to, value);
@@ -63,9 +69,16 @@ contract MyToken is IERC20, Ownable {
         return true;
     }
 
-    function transferFrom(address from, address to, uint256 value) external onlyOwner returns (bool) {
+    function transferFrom(address from, address to, uint256 value) external returns (bool) {
+        uint256 currentAllowance = _allowance[from][msg.sender];
+        require(currentAllowance >= value, "ERC20: transfer amount exceeds allowance");
+        require(_balances[from] >= value, "ERC20: transfer amount exceeds balance");
+
         _balances[from] -= value;
         _balances[to] += value;
+        _allowance[from][msg.sender] -= value;
+
+        emit Transfer(from, to, value);
         return true;
     }
 }
