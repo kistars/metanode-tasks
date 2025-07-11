@@ -89,3 +89,5 @@ contract Begging is Ownable {
         donate();
     }
 }
+
+// 合约地址：0xCf154828D0E66269A04C60C88eDD00c47dF53E43
