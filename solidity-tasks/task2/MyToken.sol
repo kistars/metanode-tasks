@@ -28,8 +28,31 @@ contract MyToken is IERC20, Ownable {
     // owner允许spender转账代币amount
     mapping(address => mapping(address => uint256)) private _allowance;
 
-    constructor() Ownable() {
+    // 增加name，symbol，decimal
+    string private _name;
+    string private _symbol;
+    uint256 private _decimal;
+
+    constructor(string memory name, string memory symbol, uint256 decimal) Ownable() {
+        _name = name;
+        _symbol = symbol;
+        _decimal = decimal;
         _mint(msg.sender, 10000);
+    }
+
+    // get name
+    function name() public view returns (string memory) {
+        return _name;
+    }
+
+    // get symbol
+    function symbol() public view returns (string memory) {
+        return _symbol;
+    }
+
+    // get decimal
+    function decimal() public view returns (uint256) {
+        return _decimal;
     }
 
     function _mint(address account, uint256 amount) internal virtual {
