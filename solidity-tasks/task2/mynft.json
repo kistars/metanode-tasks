@@ -1,0 +1,13 @@
+{
+    "description": "A spaceship launch picture.",
+    "external_url": "https://www.google.com",
+    "image": "ipfs://QmSgvgwxZGaBLqkGyWemEDqikCqU52XxsYLKtdy3vGZ8uq",
+    "name": "Spaceship",
+    "attributes": [
+        {
+            "display_type": "date",
+            "trait_type": "birthday",
+            "value": 1546360800
+        }
+    ]
+}
